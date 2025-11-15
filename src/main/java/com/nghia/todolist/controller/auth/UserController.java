@@ -1,4 +1,4 @@
-package com.nghia.todolist.controller;
+package com.nghia.todolist.controller.auth;
 
 import java.util.List;
 
@@ -11,10 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nghia.todolist.dto.BaseResponseDto;
-import com.nghia.todolist.dto.request.user.AuthDto;
 import com.nghia.todolist.dto.request.user.UserRequestDto;
 import com.nghia.todolist.dto.request.user.UserRequestRemove;
-import com.nghia.todolist.dto.response.user.AuthResponse;
 import com.nghia.todolist.dto.response.user.UserDtoNoPassword;
 import com.nghia.todolist.exceptional.BadRequestException;
 import com.nghia.todolist.service.UserService;
@@ -26,15 +24,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-    
-    @PostMapping("/api/v1/users")
-    public BaseResponseDto<String> createUser(@Valid @RequestBody UserRequestDto userRequestDto) {
-       
-        String mess = userService.createUser(userRequestDto);
-         return BaseResponseDto.success(
-                200, mess, null, System.currentTimeMillis()
-        );
-    }
 
     @GetMapping("/api/v1/users/{id}")
     public BaseResponseDto<UserDtoNoPassword> getUser(@PathVariable Long id) {
@@ -64,15 +53,6 @@ public class UserController {
         }
         return BaseResponseDto.success(
                 200, "User removed successfully", null, System.currentTimeMillis()
-        );
-    }
-
-    @PostMapping("/api/v1/login")
-    public BaseResponseDto<AuthResponse> loginUser(
-        @RequestBody AuthDto auth) {
-        
-      return BaseResponseDto.success(
-                200, "Login successful", null, System.currentTimeMillis()
         );
     }
 }

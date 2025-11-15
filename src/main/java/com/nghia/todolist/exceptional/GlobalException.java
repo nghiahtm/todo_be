@@ -2,6 +2,7 @@ package com.nghia.todolist.exceptional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -54,6 +55,22 @@ public class GlobalException {
                         400,
                         "Validation failed",
                         errors,
+                        System.currentTimeMillis()
+                )
+        );
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<BaseResponseDto<Object>> handleJwtException(JwtException ex) {
+
+        return ResponseEntity.badRequest().body(
+                BaseResponseDto.error(
+                        503,
+                        "Authentication failed",
+                        List.of(new ErrorDetail(
+                                "Token in valid",
+                                503
+                        )),
                         System.currentTimeMillis()
                 )
         );

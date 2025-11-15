@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.nghia.todolist.dto.request.user.CreateUserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nghia.todolist.dto.request.user.UserDto;
-import com.nghia.todolist.dto.request.user.UserRequestDto;
 import com.nghia.todolist.dto.request.user.UserRequestRemove;
 import com.nghia.todolist.dto.response.user.UserDtoNoPassword;
 import com.nghia.todolist.entity.Role;
@@ -29,7 +29,7 @@ public class UserService {
     @Autowired
     private UserMapperNoPassword userMapperNoPassword;
 
-    public String createUser(UserRequestDto userRequestDto) {
+    public String createUser(CreateUserDto userRequestDto) {
         if (userRequestDto == null) {
             return "Invalid user data";
         }
@@ -37,7 +37,7 @@ public class UserService {
             userRequestDto.setRole(Role.USER);
         }
         UserEntity userEntity = userMapper.toEntity(new UserDto(null,
-                userRequestDto.getName(),
+                userRequestDto.getFullName(),
                 userRequestDto.getEmail(),
                 userRequestDto.getPassword(),
                 userRequestDto.getRole()));
