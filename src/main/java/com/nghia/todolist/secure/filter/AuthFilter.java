@@ -14,9 +14,7 @@ import java.io.IOException;
 public class AuthFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtil jwtUtils;
-    public AuthFilter(JwtUtil jwtUtils) {
-        this.jwtUtils = jwtUtils;
-    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");

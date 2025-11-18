@@ -27,11 +27,10 @@ public class AuthController {
 
     @PostMapping("/api/v1/auth/login")
     public BaseResponseDto<AuthResponse> loginUser(
-            @RequestBody AuthDto auth) {
-
-        authService.getUserByUserName(auth.getUsername());
+           @Valid @RequestBody AuthDto auth) {
+        AuthResponse authResponse = authService.getUserByUserName(auth);
         return BaseResponseDto.success(
-                200, "Login successful", null, System.currentTimeMillis()
+                200, "Login successful", authResponse, System.currentTimeMillis()
         );
     }
 

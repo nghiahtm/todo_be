@@ -36,7 +36,7 @@ public class APIConfig {
 //                        .requestMatchers("/api/v1/users").hasRole("ADMIN")
                         .anyRequest().denyAll()
                 )
-                .addFilterBefore(new AuthFilter(jwtUtils), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new AuthFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

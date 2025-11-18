@@ -6,12 +6,12 @@ import java.util.stream.Collectors;
 
 import com.nghia.todolist.dto.request.user.CreateUserDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.nghia.todolist.dto.request.user.UserDto;
 import com.nghia.todolist.dto.request.user.UserRequestRemove;
 import com.nghia.todolist.dto.response.user.UserDtoNoPassword;
-import com.nghia.todolist.entity.Role;
 import com.nghia.todolist.entity.UserEntity;
 import com.nghia.todolist.mapper.UserMapper;
 import com.nghia.todolist.mapper.UserMapperNoPassword;
@@ -29,18 +29,19 @@ public class UserService {
     @Autowired
     private UserMapperNoPassword userMapperNoPassword;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     public String createUser(CreateUserDto userRequestDto) {
         if (userRequestDto == null) {
             return "Invalid user data";
         }
-        if(userRequestDto.getRole() == null) {
-            userRequestDto.setRole(Role.USER);
-        }
+
         UserEntity userEntity = userMapper.toEntity(new UserDto(null,
                 userRequestDto.getFullName(),
                 userRequestDto.getEmail(),
-                userRequestDto.getPassword(),
-                userRequestDto.getRole()));
+                passwordEncoder.encode(userRequestDto.getPassword()),
+                null));
         userRepository.save(userEntity);
         return "User created successfully";
     }
