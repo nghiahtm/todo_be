@@ -60,12 +60,6 @@ public class UserService {
     }
 
     public boolean removeUser(UserRequestRemove userRequestRemove) {
-
-        if (userRequestRemove == null || userRequestRemove.getId() == null
-                || userRequestRemove.getReason() == null) {
-            return false;
-        }
-
         // Logic to remove user by id and log the reason
         userRepository.deleteById(userRequestRemove.getId());
         return true;

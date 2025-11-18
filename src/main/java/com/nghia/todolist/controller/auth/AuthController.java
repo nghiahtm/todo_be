@@ -30,7 +30,6 @@ public class AuthController {
             @RequestBody AuthDto auth) {
 
         authService.getUserByUserName(auth.getUsername());
-        System.out.println("fiind user: " + auth.getUsername());
         return BaseResponseDto.success(
                 200, "Login successful", null, System.currentTimeMillis()
         );
