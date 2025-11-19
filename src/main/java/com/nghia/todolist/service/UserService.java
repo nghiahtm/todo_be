@@ -41,7 +41,7 @@ public class UserService {
                 userRequestDto.getFullName(),
                 userRequestDto.getEmail(),
                 passwordEncoder.encode(userRequestDto.getPassword()),
-                null));
+                userRequestDto.getRole()));
         userRepository.save(userEntity);
         return "User created successfully";
     }

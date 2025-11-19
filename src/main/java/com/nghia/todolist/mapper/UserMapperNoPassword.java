@@ -13,7 +13,7 @@ public class UserMapperNoPassword extends  BaseMapper<UserEntity, UserDtoNoPassw
         if (entity == null) {
             return null;
         }
-        return new UserDtoNoPassword(entity.getId(), entity.getName(), entity.getEmail(), entity.getRole());
+        return new UserDtoNoPassword(entity.getUserId(), entity.getName(), entity.getEmail(), entity.getRole());
     }
 
     @Override

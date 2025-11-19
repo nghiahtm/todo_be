@@ -7,6 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class AuthResponse {
     private String accessToken;
-    private String expirationToken;
+    private Long expirationToken;
 
 }

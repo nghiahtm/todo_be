@@ -22,14 +22,18 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
     public String generateToken(UserDtoNoPassword user){
-        return Jwts.builder().setSubject(user.getName())
-                .claim("username", user.getName())
-                .claim("role",user.getRole())
-                .claim("email",user.getEmail())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime()+expiration))
-                .signWith(getSignKey(),SignatureAlgorithm.ES512)
-                .compact();
+       try {
+           return Jwts.builder().setSubject(user.getName())
+                   .claim("username", user.getName())
+                   .claim("role",user.getRole())
+                   .claim("email",user.getEmail())
+                   .setIssuedAt(new Date())
+                   .setExpiration(new Date(new Date().getTime()+expiration))
+                   .signWith(getSignKey(),SignatureAlgorithm.HS512)
+                   .compact();
+       } catch (Exception e) {
+           throw new RuntimeException(e);
+       }
     }
 
     private Claims extractAllClaims(String token) {

@@ -1,4 +1,4 @@
-package com.nghia.todolist.entity;
+package com.nghia.todolist.dto.request.todo;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,16 +10,10 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "tbl_todo")
-public class TodoEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long todoId;
+public class TodoDto {
+    private Long id;
     private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private UserEntity user;
     @Column(length = 500)
     private String description;
 

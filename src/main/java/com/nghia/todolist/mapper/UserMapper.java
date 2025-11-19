@@ -14,7 +14,7 @@ public class UserMapper extends  BaseMapper<UserEntity, UserDto> {
         if (entity == null) {
             return null;
         }
-        return new UserDto(entity.getId(), entity.getName(), entity.getEmail(), entity.getPassword(), entity.getRole());
+        return new UserDto(entity.getUserId(), entity.getName(), entity.getEmail(), entity.getPassword(), entity.getRole());
     }
 
     @Override
@@ -22,11 +22,12 @@ public class UserMapper extends  BaseMapper<UserEntity, UserDto> {
         if (dto == null) {
             return null;
         }
-        UserEntity entity = new UserEntity(
+
+        return new UserEntity(
             dto.getId(), dto.getName(), dto.getEmail(),
             dto.getPassword(),
-            dto.getRole()
+            dto.getRole(),
+                null
         );   
-        return entity;
     }
 }

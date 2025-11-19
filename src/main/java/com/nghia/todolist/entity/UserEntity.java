@@ -1,26 +1,29 @@
 package com.nghia.todolist.entity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.nghia.todolist.dto.request.todo.TodoDto;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table(name = "users")
+@Table(name = "tbl_users")
 @Entity
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
     private String name;
     @Column(unique = true,nullable=false)
     private String email;
     private String password;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
+    @OneToMany
+    @JoinColumn(name = "todoId")
+    private List<TodoEntity> todos;
 }
