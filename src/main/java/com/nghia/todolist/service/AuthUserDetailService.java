@@ -28,7 +28,7 @@ public class AuthUserDetailService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 userData.getEmail(),
                 userData.getPassword(),
-                List.of(new SimpleGrantedAuthority(userData.getRole().name())) // role từ entity
+                List.of(new SimpleGrantedAuthority("ROLE_" + userData.getRole().name()))
         );
     }
 }

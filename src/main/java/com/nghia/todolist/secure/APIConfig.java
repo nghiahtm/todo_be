@@ -1,7 +1,7 @@
 package com.nghia.todolist.secure;
 
+import com.nghia.todolist.entity.Role;
 import com.nghia.todolist.secure.filter.AuthFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,13 +27,18 @@ public class APIConfig {
             "/api/v1/users/**",
             "/api/v1/profile/**"
     };
+    private static final String[] Admin_ENDPOINTS = {
+            "/api/v1/admin/**",
+    };
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers(Admin_ENDPOINTS).hasAnyAuthority("ROLE_" + Role.ADMIN.name())
                         .requestMatchers(USER_ENDPOINTS).authenticated()
+
                         .anyRequest().denyAll()
                 )
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);

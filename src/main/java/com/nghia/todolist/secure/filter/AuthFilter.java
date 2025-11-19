@@ -46,7 +46,6 @@ public class AuthFilter extends OncePerRequestFilter {
             }
             if (SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = authUserDetailService.loadUserByUsername(username);
-
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 

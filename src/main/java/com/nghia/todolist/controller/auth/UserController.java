@@ -2,7 +2,10 @@ package com.nghia.todolist.controller.auth;
 
 import java.util.List;
 
+import com.nghia.todolist.secure.jwt.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,9 +28,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/api/v1/users/{id}")
-    public BaseResponseDto<UserDtoNoPassword> getUser(@PathVariable Long id) {
-        UserDtoNoPassword userDto = userService.getUser(id);
+    @Autowired
+    private JwtUtil jwtUtil;
+    @PostMapping("/api/v1/users/profile")
+    public BaseResponseDto<UserDtoNoPassword> getUser(@AuthenticationPrincipal UserDetails userDetails) {
+        UserDtoNoPassword userDto = userService.getUser(userDetails.getUsername());
         if(userDto == null) {
             throw new BadRequestException("User not found");
         }
@@ -36,7 +41,7 @@ public class UserController {
         );
     }
 
-    @GetMapping("/api/v1/users")
+    @GetMapping("/api/v1/admin/allUsers")
     public BaseResponseDto<List<UserDtoNoPassword>> getAllUser() {
         return BaseResponseDto.success(
                 200, "Successfully", userService.getAllUser(), System.currentTimeMillis()

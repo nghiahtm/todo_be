@@ -65,11 +65,11 @@ public class GlobalException {
 
         return ResponseEntity.badRequest().body(
                 BaseResponseDto.error(
-                        503,
+                        403,
                         "Authentication failed",
                         List.of(new ErrorDetail(
                                 "Token in valid",
-                                503
+                                403
                         )),
                         System.currentTimeMillis()
                 )

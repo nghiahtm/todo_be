@@ -46,8 +46,8 @@ public class UserService {
         return "User created successfully";
     }
 
-    public UserDtoNoPassword getUser(Long id) {
-        Optional<UserEntity> userEntity = userRepository.findById(id);
+    public UserDtoNoPassword getUser(String email) {
+        Optional<UserEntity> userEntity = userRepository.findByEmail(email);
         return userMapperNoPassword.toDto(userEntity.orElse(null));
     }
 
