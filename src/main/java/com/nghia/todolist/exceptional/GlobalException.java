@@ -75,4 +75,20 @@ public class GlobalException {
                 )
         );
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<BaseResponseDto<Object>> handleJwtException(RuntimeException ex) {
+
+        return ResponseEntity.badRequest().body(
+                BaseResponseDto.error(
+                        403,
+                        " failed",
+                        List.of(new ErrorDetail(
+                                ex.getMessage(),
+                                403
+                        )),
+                        System.currentTimeMillis()
+                )
+        );
+    }
 }

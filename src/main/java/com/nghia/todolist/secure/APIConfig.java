@@ -1,7 +1,6 @@
 package com.nghia.todolist.secure;
 
 import com.nghia.todolist.secure.filter.AuthFilter;
-import com.nghia.todolist.secure.jwt.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,15 +13,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class APIConfig {
-    private JwtUtil jwtUtils;
+    private final AuthFilter authFilter;
+
+    public APIConfig(AuthFilter authFilter) {
+        this.authFilter = authFilter;
+    }
     private static final String[] PUBLIC_ENDPOINTS = {
             "/api/v1/auth/**"
-
     };
 
     // API chỉ cần user login (phải có token)
     private static final String[] USER_ENDPOINTS = {
-            "/api/v1/user/**",
+            "/api/v1/users/**",
             "/api/v1/profile/**"
     };
     @Bean
@@ -30,13 +32,11 @@ public class APIConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        // 🔒 API yêu cầu token
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                         .requestMatchers(USER_ENDPOINTS).authenticated()
-//                        .requestMatchers("/api/v1/users").hasRole("ADMIN")
                         .anyRequest().denyAll()
                 )
-                .addFilterBefore(new AuthFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

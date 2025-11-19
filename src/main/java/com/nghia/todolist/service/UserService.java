@@ -48,8 +48,7 @@ public class UserService {
 
     public UserDtoNoPassword getUser(Long id) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
-        return userEntity.map(userMapperNoPassword::toDto).orElse(null);
-
+        return userMapperNoPassword.toDto(userEntity.orElse(null));
     }
 
     public List<UserDtoNoPassword> getAllUser() {

@@ -16,20 +16,21 @@ public class JwtUtil {
     @Value("${auth.jwt.secret}")
     private String jwtSecret;
     @Value("${auth.jwt.expiration}")
-    private int expiration;
+    private long expiration;
 
     private SecretKey getSignKey() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
     public String generateToken(UserDtoNoPassword user){
        try {
-           return Jwts.builder().setSubject(user.getName())
-                   .claim("username", user.getName())
+           return Jwts.builder().setSubject(user.getEmail())
+                   .claim("fullName", user.getName())
                    .claim("role",user.getRole())
                    .claim("email",user.getEmail())
+                   .claim("id",user.getId())
                    .setIssuedAt(new Date())
-                   .setExpiration(new Date(new Date().getTime()+expiration))
-                   .signWith(getSignKey(),SignatureAlgorithm.HS512)
+                   .setExpiration(new Date(new Date().getTime()+(expiration * 1000)))
+                   .signWith(getSignKey(),SignatureAlgorithm.HS256)
                    .compact();
        } catch (Exception e) {
            throw new RuntimeException(e);
@@ -56,11 +57,16 @@ public class JwtUtil {
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
+
     public boolean validateToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            Jwts.parserBuilder()
+                    .setSigningKey(jwtSecret.getBytes()) // nếu secret là String
+                    .build()
+                    .parseClaimsJws(authToken);
             return true;
-        }  catch (JwtException | IllegalArgumentException ex) {
+
+        } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
