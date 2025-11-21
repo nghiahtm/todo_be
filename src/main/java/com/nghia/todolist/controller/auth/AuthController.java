@@ -9,7 +9,6 @@ import com.nghia.todolist.secure.jwt.JwtUtil;
 import com.nghia.todolist.service.AuthService;
 import com.nghia.todolist.service.UserService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

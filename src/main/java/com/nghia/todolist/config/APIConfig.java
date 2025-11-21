@@ -1,4 +1,4 @@
-package com.nghia.todolist.secure;
+package com.nghia.todolist.config;
 
 import com.nghia.todolist.entity.Role;
 import com.nghia.todolist.secure.filter.AuthFilter;
@@ -25,6 +25,7 @@ public class APIConfig {
     // API chỉ cần user login (phải có token)
     private static final String[] USER_ENDPOINTS = {
             "/api/v1/users/**",
+            "/api/v1/todo/**",
     };
     private static final String[] Admin_ENDPOINTS = {
             "/api/v1/admin/**",
