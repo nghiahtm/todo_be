@@ -4,7 +4,7 @@ COPY . .
 RUN mvn clean package -DskipTests
 LABEL authors="htmn"
 
-FROM openjdk:17-jdk-slim
+FROM openjdk:17-oracle
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
