@@ -4,6 +4,7 @@ import com.nghia.todolist.entity.UserEntity;
 import com.nghia.todolist.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,8 +25,7 @@ public class AuthUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userData = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-
-        return new org.springframework.security.core.userdetails.User(
+        return new User(
                 userData.getEmail(),
                 userData.getPassword(),
                 List.of(new SimpleGrantedAuthority("ROLE_" + userData.getRole().name()))

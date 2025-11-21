@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import io.jsonwebtoken.JwtException;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -81,11 +82,11 @@ public class GlobalException {
 
         return ResponseEntity.badRequest().body(
                 BaseResponseDto.error(
-                        403,
+                        HttpServletResponse.SC_BAD_REQUEST,
                         " failed",
                         List.of(new ErrorDetail(
-                                ex.getMessage(),
-                                403
+                                "BAD REQUEST",
+                                HttpServletResponse.SC_BAD_REQUEST
                         )),
                         System.currentTimeMillis()
                 )

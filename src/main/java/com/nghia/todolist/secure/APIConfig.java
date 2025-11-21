@@ -25,7 +25,6 @@ public class APIConfig {
     // API chỉ cần user login (phải có token)
     private static final String[] USER_ENDPOINTS = {
             "/api/v1/users/**",
-            "/api/v1/profile/**"
     };
     private static final String[] Admin_ENDPOINTS = {
             "/api/v1/admin/**",

@@ -2,7 +2,11 @@ package com.nghia.todolist.secure.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nghia.todolist.dto.BaseResponseDto;
+import com.nghia.todolist.dto.response.user.AuthResponse;
 import com.nghia.todolist.entity.ErrorDetail;
+import com.nghia.todolist.entity.UserEntity;
+import com.nghia.todolist.mapper.UserMapperNoPassword;
+import com.nghia.todolist.repository.UserRepository;
 import com.nghia.todolist.secure.jwt.JwtUtil;
 import com.nghia.todolist.service.AuthUserDetailService;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -11,6 +15,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,6 +30,12 @@ import java.util.List;
 public class AuthFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtils;
     private final AuthUserDetailService authUserDetailService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserMapperNoPassword userMapperNoPassword;
     public AuthFilter(JwtUtil jwtUtils,AuthUserDetailService authUserDetailService) {
         this.jwtUtils = jwtUtils;
         this.authUserDetailService = authUserDetailService;
@@ -37,10 +48,11 @@ public class AuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+
         try {
             String token = authHeader.substring(7);
-            String username = jwtUtils.extractUsername(token);
 
+            String username = jwtUtils.extractUsername(token);
             if (username == null || !jwtUtils.validateToken(token)) {
                 throw new RuntimeException("Invalid JWT Token");
             }
@@ -54,21 +66,22 @@ public class AuthFilter extends OncePerRequestFilter {
             }
         }
         catch (ExpiredJwtException e) {
-            setErrorResponse(HttpServletResponse.SC_FORBIDDEN, response, "Token expired");
+            setErrorResponse(response, "Token expired");
             return;
         }
         catch (MalformedJwtException e) {
-            setErrorResponse(HttpServletResponse.SC_FORBIDDEN, response, "Invalid token");
+            setErrorResponse( response, "Invalid token");
             return;
         }
         catch (Exception e) {
-            setErrorResponse(HttpServletResponse.SC_FORBIDDEN, response, "Unauthorized request");
+            setErrorResponse( response, "Unauthorized request");
             return;
         }
         filterChain.doFilter(request, response);
     }
 
-    private void setErrorResponse(int status, HttpServletResponse response, String message) throws IOException {
+    private void setErrorResponse(HttpServletResponse response, String message) throws IOException {
+        int status = HttpServletResponse.SC_FORBIDDEN;
         response.setStatus(status);
         response.setContentType("application/json");
         BaseResponseDto<Object> baseError = BaseResponseDto.error(

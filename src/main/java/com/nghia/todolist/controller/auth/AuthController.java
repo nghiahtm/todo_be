@@ -3,11 +3,13 @@ package com.nghia.todolist.controller.auth;
 import com.nghia.todolist.dto.BaseResponseDto;
 import com.nghia.todolist.dto.request.user.AuthDto;
 import com.nghia.todolist.dto.request.user.CreateUserDto;
+import com.nghia.todolist.dto.request.user.RefreshTokenDto;
 import com.nghia.todolist.dto.response.user.AuthResponse;
 import com.nghia.todolist.secure.jwt.JwtUtil;
 import com.nghia.todolist.service.AuthService;
 import com.nghia.todolist.service.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,10 +38,17 @@ public class AuthController {
 
     @PostMapping("/api/v1/auth/create")
     public BaseResponseDto<String> createUser(@Valid @RequestBody CreateUserDto createUserDto) {
-
         String mess = userService.createUser(createUserDto);
         return BaseResponseDto.success(
                 200, mess, null, System.currentTimeMillis()
+        );
+    }
+
+    @PostMapping("/api/v1/auth/refreshToken")
+    public BaseResponseDto<AuthResponse> refreshToken(@RequestBody RefreshTokenDto refreshToken) {
+        AuthResponse authResponse = authService.refreshToken(refreshToken.getRefreshToken());
+        return BaseResponseDto.success(
+                200, "Refresh successful", authResponse, System.currentTimeMillis()
         );
     }
 }

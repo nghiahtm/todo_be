@@ -16,12 +16,13 @@ public class JwtUtil {
     @Value("${auth.jwt.secret}")
     private String jwtSecret;
     @Value("${auth.jwt.expiration}")
-    private long expiration;
-
+    private long expirationAccessToken;
+    @Value("${auth.jwt.expiration_ref_token}")
+    private long expirationRefreshToken;
     private SecretKey getSignKey() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
-    public String generateToken(UserDtoNoPassword user){
+    public String generateAccessToken(UserDtoNoPassword user){
        try {
            return Jwts.builder().setSubject(user.getEmail())
                    .claim("fullName", user.getName())
@@ -29,14 +30,24 @@ public class JwtUtil {
                    .claim("email",user.getEmail())
                    .claim("id",user.getId())
                    .setIssuedAt(new Date())
-                   .setExpiration(new Date(new Date().getTime()+(expiration * 1000)))
+                   .setExpiration(new Date(new Date().getTime()+(expirationAccessToken * 1000)))
                    .signWith(getSignKey(),SignatureAlgorithm.HS256)
                    .compact();
        } catch (Exception e) {
            throw new RuntimeException(e);
        }
     }
-
+    public String generateRefreshToken(String username){
+        try {
+            return Jwts.builder().setSubject(username)
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date(new Date().getTime()+(expirationRefreshToken * 1000)))
+                    .signWith(getSignKey(),SignatureAlgorithm.HS256)
+                    .compact();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSignKey())
