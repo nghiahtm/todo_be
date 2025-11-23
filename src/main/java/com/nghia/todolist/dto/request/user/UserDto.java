@@ -1,5 +1,5 @@
 package com.nghia.todolist.dto.request.user;
-import com.nghia.todolist.entity.Role;
+import com.nghia.todolist.utils.enums.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

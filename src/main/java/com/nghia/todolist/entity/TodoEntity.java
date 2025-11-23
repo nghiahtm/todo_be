@@ -1,5 +1,6 @@
 package com.nghia.todolist.entity;
 
+import com.nghia.todolist.utils.enums.TodoStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,8 +24,9 @@ public class TodoEntity {
     @Column(length = 500)
     private String description;
 
+    @Enumerated(EnumType.STRING)
+    private TodoStatus status;
     private Date timeAt;
-
     private Date createDate;
     private Date updateAt;
 }

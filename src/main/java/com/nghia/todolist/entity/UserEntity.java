@@ -1,5 +1,5 @@
 package com.nghia.todolist.entity;
-import com.nghia.todolist.dto.request.todo.TodoDto;
+import com.nghia.todolist.utils.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
