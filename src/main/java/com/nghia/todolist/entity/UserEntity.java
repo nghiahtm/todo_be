@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Data
 @Table(name = "tbl_users")
 @Entity
+@ToString(exclude = {"todos"}) // Loại trừ List<TodoEntity>
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +25,6 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-    @OneToMany
-    @JoinColumn(name = "todoId")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TodoEntity> todos;
 }

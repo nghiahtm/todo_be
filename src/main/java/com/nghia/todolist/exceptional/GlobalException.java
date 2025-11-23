@@ -1,5 +1,6 @@
 package com.nghia.todolist.exceptional;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import io.jsonwebtoken.JwtException;
@@ -79,13 +80,12 @@ public class GlobalException {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<BaseResponseDto<Object>> handleJwtException(RuntimeException ex) {
-
         return ResponseEntity.badRequest().body(
                 BaseResponseDto.error(
                         HttpServletResponse.SC_BAD_REQUEST,
                         " failed",
                         List.of(new ErrorDetail(
-                                "BAD REQUEST",
+                                ex.getMessage(),
                                 HttpServletResponse.SC_BAD_REQUEST
                         )),
                         System.currentTimeMillis()

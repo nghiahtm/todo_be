@@ -18,8 +18,8 @@ public class TodoEntity {
     private Long todoId;
     private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "userId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId",nullable = false)
     private UserEntity user;
     @Column(length = 500)
     private String description;
