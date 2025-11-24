@@ -41,8 +41,8 @@ public class TodoController {
     }
 
     @PostMapping("/api/v1/todo/getTodos")
-    BaseResponseDto<List<TodoResponse>> getTodo(@RequestBody TodoReqIdUser request) {
-        List<TodoEntity> todos = todoService.getUserTodo(request.getId());
+    BaseResponseDto<List<TodoResponse>> getTodosFilter() {
+        List<TodoEntity> todos = todoService.getUserTodo();
         return BaseResponseDto.success(
                 200, "Successful", todos.stream().map((e) -> todoResToEMapper.toDto(e)).toList(), System.currentTimeMillis()
         );

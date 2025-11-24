@@ -9,8 +9,5 @@ import java.util.List;
 
 @Repository
 public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
-//    @Query("SELECT tbl_todo FROM " +
-//            "TodoEntity t WHERE t.id IN " +
-//            "(SELECT f.todoId FROM Follow f WHERE f.userId = :userId)")
-//    List<TodoEntity> findFollowUser (Long idUser);
+    List<TodoEntity> findByIdUserOrderByCreateDateDesc(Long idUser);
 }

@@ -26,8 +26,7 @@ public class UserMapper extends  BaseMapper<UserEntity, UserDto> {
         return new UserEntity(
             dto.getId(), dto.getName(), dto.getEmail(),
             dto.getPassword(),
-            dto.getRole(),
-                null
-        );   
+            dto.getRole()
+        );
     }
 }

@@ -10,14 +10,16 @@ import org.springframework.context.annotation.Configuration;
 public class TodoResToEMapper extends BaseMapper<TodoEntity, TodoResponse> {
     @Override
     public TodoResponse toDto(TodoEntity entity) {
-        return new TodoResponse(
-                entity.getDescription(),
-                entity.getTitle(),
-                entity.getTimeAt(),
-                entity.getUser().getUserId(),
-                entity.getStatus(),
-                entity.getTodoId()
-        );
+        return TodoResponse.builder()
+                .description(entity.getDescription())
+                .title(entity.getTitle())
+                .timeSet(entity.getTimeAt())
+                .idUser(entity.getIdUser())
+                .todoStatus(entity.getTodoStatus())
+                .idTodo(entity.getTodoId())
+                .createdAt(entity.getCreateDate())
+                .updatedAt(entity.getUpdateAt())
+                .build();
     }
 
     @Override

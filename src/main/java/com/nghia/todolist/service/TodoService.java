@@ -1,5 +1,6 @@
 package com.nghia.todolist.service;
 import com.nghia.todolist.dto.request.todo.TodoRequest;
+import com.nghia.todolist.dto.response.user.UserDtoNoPassword;
 import com.nghia.todolist.entity.TodoEntity;
 import com.nghia.todolist.entity.UserEntity;
 import com.nghia.todolist.mapper.todo.TodoReqToEMapper;
@@ -21,13 +22,16 @@ public class TodoService implements BaseCRUDInterface<TodoRequest, TodoEntity> {
 
     @Autowired
     private TodoReqToEMapper todoReqToEMapper;
+
+    @Autowired
+    private UserService userService;
+
     @Override
     public TodoEntity create(TodoRequest request) {
-        UserEntity userFound = userRepository.findById(request.getIdUserFound()).orElse(null);
-        TodoEntity todoEntity = todoReqToEMapper.toEntity(request);
-        todoEntity.setUser(userFound);
+
+        TodoEntity todoEntity = todoReqToEMapper.toEntity(request, userService.getIdUserAuthorize());
         todoRepository.save(todoEntity);
-        return null;
+        return todoReqToEMapper.toEntity(request,userService.getIdUserAuthorize());
     }
 
     @Override
@@ -46,7 +50,8 @@ public class TodoService implements BaseCRUDInterface<TodoRequest, TodoEntity> {
          return new TodoEntity();
     }
 
-    public List<TodoEntity> getUserTodo(Long idUser) {
-        return null;
+    public List<TodoEntity> getUserTodo() {
+        Long idUser = userService.getIdUserAuthorize();
+        return todoRepository.findByIdUserOrderByCreateDateDesc(idUser);
     }
 }

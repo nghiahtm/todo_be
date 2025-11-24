@@ -13,7 +13,6 @@ import java.util.List;
 @Data
 @Table(name = "tbl_users")
 @Entity
-@ToString(exclude = {"todos"}) // Loại trừ List<TodoEntity>
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +24,4 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TodoEntity> todos;
 }
