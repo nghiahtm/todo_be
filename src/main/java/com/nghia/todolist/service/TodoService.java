@@ -1,9 +1,7 @@
 package com.nghia.todolist.service;
 
 import com.nghia.todolist.dto.request.todo.TodoRequest;
-import com.nghia.todolist.dto.response.user.UserDtoNoPassword;
 import com.nghia.todolist.entity.TodoEntity;
-import com.nghia.todolist.entity.UserEntity;
 import com.nghia.todolist.mapper.todo.TodoReqToEMapper;
 import com.nghia.todolist.repository.TodoRepository;
 import com.nghia.todolist.repository.UserRepository;
@@ -17,7 +15,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class TodoService implements BaseCRUDInterface<TodoRequest, TodoEntity> {
@@ -35,7 +32,6 @@ public class TodoService implements BaseCRUDInterface<TodoRequest, TodoEntity> {
 
     @Override
     public TodoEntity create(TodoRequest request) {
-
         TodoEntity todoEntity = todoReqToEMapper.toEntity(request, userService.getIdUserAuthorize());
         todoRepository.save(todoEntity);
         return todoReqToEMapper.toEntity(request, userService.getIdUserAuthorize());
@@ -43,22 +39,46 @@ public class TodoService implements BaseCRUDInterface<TodoRequest, TodoEntity> {
 
     @Override
     public TodoEntity read(Long id) {
-        return todoRepository.findById(id).orElse(null);
+        Long idUser = userService.getIdUserAuthorize();
+        TodoEntity todoFound = todoRepository.findByTodoIdAndIdUser(id,idUser);
+        if(todoFound == null){
+            throw new NullPointerException("Todo Not Found");
+        }
+        return todoFound;
     }
 
     @Override
-    public TodoEntity update(TodoRequest request) {
-        return null;
+    public TodoEntity update(Long id,TodoRequest request) {
+        TodoEntity existingTodo = read(id);
+        if(!request.getDescription().isBlank()) {
+            existingTodo.setDescription(request.getDescription());
+        }
+        if(!request.getTitle().isBlank()) {
+            existingTodo.setDescription(request.getTitle());
+        }
+        if(request.getTodoStatus() != null) {
+            existingTodo.setTodoStatus(request.getTodoStatus());
+        }
+        if(request.getTimeSet() != null) {
+            existingTodo.setTimeAt(request.getTimeSet());
+        }else{
+            existingTodo.setTimeAt(new Date());
+        }
+        existingTodo.setUpdateAt(new Date());
+        todoRepository.save(existingTodo);
+        return read(id);
     }
 
     @Override
     public TodoEntity remove(Long id) {
+        Long idUser = userService.getIdUserAuthorize();
         todoRepository.deleteById(id);
         return new TodoEntity();
     }
 
     public Page<TodoEntity> getUserTodo(String title, Date startDate, Date endDate, TodoStatus status, Pageable pageable) {
         // 1. Kiểm tra Business Logic
+        Long idUser = userService.getIdUserAuthorize();
         if (endDate != null && startDate != null) {
             // Giả sử getTimeAt là End Date và getCreateDate là Create Date
             if (endDate.before(startDate)) {
@@ -66,7 +86,7 @@ public class TodoService implements BaseCRUDInterface<TodoRequest, TodoEntity> {
                 throw new IllegalArgumentException("End date cannot be before the start date/creation date.");
             }
         }
-        Long idUser = userService.getIdUserAuthorize();
+
         Specification<TodoEntity> specsTodo = TodoSpecifications.filterTodos(title, startDate, endDate, idUser, status);
         return todoRepository.findAll(specsTodo, pageable);
     }

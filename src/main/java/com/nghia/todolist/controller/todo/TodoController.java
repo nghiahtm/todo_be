@@ -2,8 +2,8 @@ package com.nghia.todolist.controller.todo;
 
 import com.nghia.todolist.dto.BaseResponseDto;
 import com.nghia.todolist.dto.request.todo.TodoReqId;
-import com.nghia.todolist.dto.request.todo.TodoReqIdUser;
 import com.nghia.todolist.dto.request.todo.TodoRequest;
+import com.nghia.todolist.dto.request.todo.TodoUpdate;
 import com.nghia.todolist.dto.response.BasePageResponse;
 import com.nghia.todolist.dto.response.todo.TodoResponse;
 import com.nghia.todolist.entity.TodoEntity;
@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
-import java.util.List;
 
 @RestController
 public class TodoController {
@@ -41,8 +40,8 @@ public class TodoController {
         );
     }
 
-    @PostMapping("/api/v1/todo/getTodo")
-    BaseResponseDto<TodoResponse> getTodo(@RequestBody TodoReqId request) {
+    @PostMapping("/api/v1/todo/detail")
+    BaseResponseDto<TodoResponse> getDetail(@RequestBody TodoReqId request) {
         TodoEntity todo = todoService.read(request.getId());
         return BaseResponseDto.success(
                 200, "Successful", todoResToEMapper.toDto(todo), System.currentTimeMillis()
@@ -62,6 +61,22 @@ public class TodoController {
 
         return BaseResponseDto.success(
                 200, "Successful",  new BasePageResponse<>(todos), System.currentTimeMillis()
+        );
+    }
+
+    @PostMapping("/api/v1/todo/update")
+    BaseResponseDto<TodoResponse> update(
+            @RequestBody TodoUpdate todoUpdate
+    ) {
+        TodoRequest todoRequest = TodoRequest.builder()
+                .description(todoUpdate.getDescription())
+                .todoStatus(todoUpdate.getStatus())
+                .timeSet(todoUpdate.getTimeSet())
+                .title(todoUpdate.getTitle())
+                .build();
+        TodoEntity todo = todoService.update(todoUpdate.getId(),todoRequest);
+        return BaseResponseDto.success(
+                200, "Updated Successful",  todoResToEMapper.toDto(todo), System.currentTimeMillis()
         );
     }
 }
