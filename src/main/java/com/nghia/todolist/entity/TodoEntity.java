@@ -33,4 +33,6 @@ public class TodoEntity {
     private Date createDate  = new Date();
     @Builder.Default
     private Date updateAt = new Date();
+    @Builder.Default
+    private Boolean isRemoved = false;
 }

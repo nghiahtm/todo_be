@@ -79,5 +79,15 @@ public class TodoController {
                 200, "Updated Successful",  todoResToEMapper.toDto(todo), System.currentTimeMillis()
         );
     }
+
+    @PostMapping("/api/v1/todo/remove")
+    BaseResponseDto<TodoResponse> remove(
+            @RequestBody TodoReqId request
+    ) {
+        TodoEntity todo = todoService.remove(request.getId());
+        return BaseResponseDto.success(
+                200, "Updated Successful",  todoResToEMapper.toDto(todo), System.currentTimeMillis()
+        );
+    }
 }
 

@@ -41,7 +41,7 @@ public class TodoService implements BaseCRUDInterface<TodoRequest, TodoEntity> {
     public TodoEntity read(Long id) {
         Long idUser = userService.getIdUserAuthorize();
         TodoEntity todoFound = todoRepository.findByTodoIdAndIdUser(id,idUser);
-        if(todoFound == null){
+        if(todoFound == null||todoFound.getIsRemoved()){
             throw new NullPointerException("Todo Not Found");
         }
         return todoFound;
@@ -71,9 +71,11 @@ public class TodoService implements BaseCRUDInterface<TodoRequest, TodoEntity> {
 
     @Override
     public TodoEntity remove(Long id) {
-        Long idUser = userService.getIdUserAuthorize();
-        todoRepository.deleteById(id);
-        return new TodoEntity();
+        TodoEntity existingTodo = read(id);
+        existingTodo.setIsRemoved(true);
+        existingTodo.setTodoStatus(TodoStatus.STOP);
+        todoRepository.save(existingTodo);
+        return existingTodo;
     }
 
     public Page<TodoEntity> getUserTodo(String title, Date startDate, Date endDate, TodoStatus status, Pageable pageable) {

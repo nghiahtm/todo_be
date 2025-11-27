@@ -45,8 +45,10 @@ public class TodoSpecifications {
             if (status != null) {
                 // timeAt >= startDate
                 predicates.add(criteriaBuilder.equal(
-                        root.get("todo_status"), status));
+                        root.get("todoStatus"), status));
             }
+            predicates.add(criteriaBuilder.equal(
+                    root.get("isRemoved"), false));
             // Kết hợp TẤT CẢ các điều kiện đã thêm bằng toán tử AND
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };

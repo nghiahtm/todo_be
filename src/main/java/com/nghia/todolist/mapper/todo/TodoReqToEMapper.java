@@ -16,16 +16,13 @@ public class TodoReqToEMapper extends BaseMapper<TodoEntity, TodoRequest> {
 
     @Override
     public TodoEntity toEntity(TodoRequest dto) {
-         return new TodoEntity(
-                null,
-                dto.getTitle(),
-                null,
-                dto.getDescription(),
-                null,
-                dto.getTimeSet(),
-                new Date(),
-                new Date()
-        );
+        return TodoEntity.builder()
+                .title(dto.getTitle())
+                .description(dto.getDescription())
+                .timeAt(dto.getTimeSet())
+                .createDate(new Date())
+                .updateAt(new Date())
+                .build();
     }
 
     public TodoEntity toEntity(TodoRequest dto, Long idUser) {
