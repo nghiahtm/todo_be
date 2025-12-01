@@ -55,7 +55,7 @@ public class TodoController {
             @RequestParam(required = false) String title,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate,
-            @RequestParam(required = false) TodoStatus status
+            @RequestParam(required = false) String status
     ) {
         Page<TodoEntity> todos = todoService.getUserTodo(title,startDate,endDate,status,pageable);
 

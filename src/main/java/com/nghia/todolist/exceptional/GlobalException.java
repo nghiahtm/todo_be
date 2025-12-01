@@ -120,7 +120,7 @@ public class GlobalException {
         return ResponseEntity.badRequest().body(
                 BaseResponseDto.error(
                         HttpServletResponse.SC_BAD_REQUEST,
-                        "Not valid data",
+                        ex.getMessage(),
                         List.of(new ErrorDetail(
                                 "Not valid data",
                                 HttpServletResponse.SC_BAD_REQUEST

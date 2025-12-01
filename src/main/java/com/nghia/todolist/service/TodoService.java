@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class TodoService implements BaseCRUDInterface<TodoRequest, TodoEntity> {
@@ -78,7 +79,7 @@ public class TodoService implements BaseCRUDInterface<TodoRequest, TodoEntity> {
         return existingTodo;
     }
 
-    public Page<TodoEntity> getUserTodo(String title, Date startDate, Date endDate, TodoStatus status, Pageable pageable) {
+    public Page<TodoEntity> getUserTodo(String title, Date startDate, Date endDate, String status, Pageable pageable) {
         // 1. Kiểm tra Business Logic
         Long idUser = userService.getIdUserAuthorize();
         if (endDate != null && startDate != null) {
@@ -88,8 +89,13 @@ public class TodoService implements BaseCRUDInterface<TodoRequest, TodoEntity> {
                 throw new IllegalArgumentException("End date cannot be before the start date/creation date.");
             }
         }
-
-        Specification<TodoEntity> specsTodo = TodoSpecifications.filterTodos(title, startDate, endDate, idUser, status);
+        Optional<TodoStatus> inputStatus = TodoStatus.fromString(status);
+        TodoStatus statusParse = null;
+        if(inputStatus.isPresent()){
+            statusParse = inputStatus.get();
+        }
+        Specification<TodoEntity> specsTodo = TodoSpecifications.filterTodos(title, startDate, endDate, idUser,
+                statusParse);
         return todoRepository.findAll(specsTodo, pageable);
     }
 }
