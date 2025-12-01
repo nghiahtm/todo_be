@@ -1,12 +1,12 @@
-package com.nghia.todolist.dto.request.user;
+package com.nghia.todolist.dto.request.todo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
+@Data
 @NoArgsConstructor
-public class RefreshTokenDto {
-    private String refreshToken;
+public class TodoReqId {
+    private Long id;
 }

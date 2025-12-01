@@ -1,6 +1,6 @@
 package com.nghia.todolist.config;
 
-import com.nghia.todolist.entity.Role;
+import com.nghia.todolist.utils.enums.Role;
 import com.nghia.todolist.secure.filter.AuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

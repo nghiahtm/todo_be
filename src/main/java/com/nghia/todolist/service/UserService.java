@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 import com.nghia.todolist.dto.request.user.CreateUserDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -65,4 +68,26 @@ public class UserService {
         return true;
     }
 
+    private String getUserAuth() {
+        // 1. Lấy đối tượng Authentication
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = null;
+        if (authentication != null && authentication.isAuthenticated()) {
+            // 2. Lấy Principal (thông tin người dùng)
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails) {
+                // Nếu Principal là UserDetails (thường thấy khi dùng UserDetailsService)
+                username = ((UserDetails) principal).getUsername();
+            } else {
+                // Hoặc là một String (nếu là token)
+                username = principal.toString();
+            }
+        }
+        return username;
+    }
+
+    public Long getIdUserAuthorize(){
+        UserDtoNoPassword detailUser = getUser(getUserAuth());
+        return detailUser.getId();
+    }
 }

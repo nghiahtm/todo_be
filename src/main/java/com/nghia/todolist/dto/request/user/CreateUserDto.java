@@ -1,6 +1,6 @@
 package com.nghia.todolist.dto.request.user;
 
-import com.nghia.todolist.entity.Role;
+import com.nghia.todolist.utils.enums.Role;
 import com.nghia.todolist.utils.custom_annotation.email_exist.UniqueEmail;
 import com.nghia.todolist.utils.custom_annotation.match_password.CustomPasswordMatch;
 import jakarta.validation.constraints.Email;

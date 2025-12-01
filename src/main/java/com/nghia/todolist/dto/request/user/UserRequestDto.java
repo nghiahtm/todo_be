@@ -1,6 +1,6 @@
 package com.nghia.todolist.dto.request.user;
 
-import com.nghia.todolist.entity.Role;
+import com.nghia.todolist.utils.enums.Role;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

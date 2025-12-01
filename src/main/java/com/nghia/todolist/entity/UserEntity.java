@@ -1,9 +1,10 @@
 package com.nghia.todolist.entity;
-import com.nghia.todolist.dto.request.todo.TodoDto;
+import com.nghia.todolist.utils.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -23,7 +24,4 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-    @OneToMany
-    @JoinColumn(name = "todoId")
-    private List<TodoEntity> todos;
 }

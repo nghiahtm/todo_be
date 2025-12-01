@@ -1,4 +1,4 @@
-package com.nghia.todolist.entity;
+package com.nghia.todolist.utils.enums;
 
 public enum Role {
     USER,
