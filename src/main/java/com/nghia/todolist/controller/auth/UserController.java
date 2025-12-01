@@ -3,24 +3,21 @@ package com.nghia.todolist.controller.auth;
 import java.util.List;
 
 import com.nghia.todolist.secure.jwt.JwtUtil;
+import com.nghia.todolist.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nghia.todolist.dto.BaseResponseDto;
-import com.nghia.todolist.dto.request.user.UserRequestDto;
 import com.nghia.todolist.dto.request.user.UserRequestRemove;
 import com.nghia.todolist.dto.response.user.UserDtoNoPassword;
 import com.nghia.todolist.exceptional.BadRequestException;
 import com.nghia.todolist.service.UserService;
-
-import jakarta.validation.Valid;
 
 @RestController
 public class UserController {
@@ -30,6 +27,10 @@ public class UserController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private AuthService authService;
+
     @PostMapping("/api/v1/users/profile")
     public BaseResponseDto<UserDtoNoPassword> getUser(@AuthenticationPrincipal UserDetails userDetails) {
         UserDtoNoPassword userDto = userService.getUser(userDetails.getUsername());
@@ -58,6 +59,15 @@ public class UserController {
         }
         return BaseResponseDto.success(
                 200, "User removed successfully", null, System.currentTimeMillis()
+        );
+    }
+
+
+    @PostMapping("/api/v1/users/logout")
+    public BaseResponseDto<Boolean> logout(@AuthenticationPrincipal UserDetails userDetails) {
+        Boolean isSuccessful = authService.logout(userDetails.getUsername());
+        return BaseResponseDto.success(
+                200, "Logout successful", isSuccessful, System.currentTimeMillis()
         );
     }
 }
