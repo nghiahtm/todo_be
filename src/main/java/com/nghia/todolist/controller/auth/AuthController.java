@@ -10,6 +10,8 @@ import com.nghia.todolist.service.AuthService;
 import com.nghia.todolist.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,6 +48,11 @@ public class AuthController {
     @PostMapping("/api/v1/auth/refreshToken")
     public BaseResponseDto<AuthResponse> refreshToken(@RequestBody RefreshTokenDto refreshToken) {
         AuthResponse authResponse = authService.refreshToken(refreshToken.getRefreshToken());
+        if(authResponse == null){
+            return BaseResponseDto.success(
+                    200, "Refresh failed", null, System.currentTimeMillis()
+            );
+        }
         return BaseResponseDto.success(
                 200, "Refresh successful", authResponse, System.currentTimeMillis()
         );
