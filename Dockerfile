@@ -1,6 +1,8 @@
 FROM maven:3.9.6-eclipse-temurin-17 AS build
+
 WORKDIR /app
 COPY . .
+ENV SPRING_PROFILES_ACTIVE=prod
 RUN mvn clean package -DskipTests
 LABEL authors="htmn"
 
